@@ -12,9 +12,6 @@ public:
     virtual std::string hello() {
         return std::string("hello world");
     }
-    virtual void imshow(std::string title, cv::Mat& img) {
-        cv::imshow(title, img);
-    }
 };
 
 class PyExample : public Example {
@@ -28,19 +25,10 @@ public:
             hello,
         );
     }
-    void imshow(std::string title, cv::Mat& img) override {
-        PYBIND11_OVERLOAD_PURE(
-            void, /* Return type */
-            Example,      /* Parent class */
-            imshow,          /* Name of function in C++ (must match Python name) */
-            title, img      /* Argument(s) */
-        );
-    }
 };
 
 PYBIND11_MODULE(class_wrapper, m) {
     py::class_<Example, PyExample>(m, "Example")
         .def(py::init<>())
-        .def("hello", &Example::hello)
-        .def("imshow", &Example::imshow);
+        .def("hello", &Example::hello);
 }
